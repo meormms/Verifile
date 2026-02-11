@@ -1,0 +1,27 @@
+to install this,
+
+flask
+flask-sqlalchemy
+flask-login
+flask-mail
+
+use: py -m pip install flask flask-sqlalchemy flask-login flask-mail
+
+next, type: py app.py
+
+and click on the given link: http://127.0.0.1:8080
+
+the folder structure:
+
+VERIFILE (FYP)/
+├── app.py
+├── verifile.db
+├── requirements.txt
+├── uploads/          (Folder fail fizikal)
+└── templates/        (Folder HTML)
+    ├── login.html
+    ├── register.html
+    ├── recover.html
+    ├── dashboard_admin.html
+    ├── dashboard_user.html
+    └── library.html

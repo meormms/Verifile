@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User - Verification Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <span class="navbar-brand">VERIFILE USER</span>
+            <a href="/" class="btn btn-light btn-sm">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% if result_msg %}
+            <div class="alert {% if match %}alert-success{% else %}alert-danger{% endif %} shadow">
+                <h4 class="alert-heading text-center">{{ result_msg }}</h4>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card p-3 shadow-sm">
+                    <h5>Check File Integrity</h5>
+                    <form action="/compare" method="POST" enctype="multipart/form-data">
+                        <label class="small text-muted">1. Choose file from Library</label>
+                        <select name="file_id" class="form-select mb-3">
+                            {% for f in files %}
+                                <option value="{{ f.id }}">{{ f.filename }} ({{ f.category }})</option>
+                            {% endfor %}
+                        </select>
+                        <label class="small text-muted">2. Upload your file to compare</label>
+                        <input type="file" name="file" class="form-control mb-3" required>
+                        <button type="submit" class="btn btn-success w-100">Compare Hashing</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <h5>Available Library (Read Only)</h5>
+                <table class="table table-sm bg-white border">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Category</th>
+                            <th>Filename</th>
+                            <th>Latest Version Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in files %}
+                        <tr>
+                            <td>{{ f.category }}</td>
+                            <td>{{ f.filename }}</td>
+                            <td>{{ f.upload_time.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

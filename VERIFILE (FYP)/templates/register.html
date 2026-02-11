@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERIFILE - Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #1a1a2e, #16213e); height: 100vh; color: white; }
+        .register-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="register-card p-4 shadow-lg">
+                    <h2 class="text-center fw-bold text-info">Create Account</h2>
+                    <p class="text-center small mb-4">Join VERIFILE System</p>
+                    
+                    <form action="/register" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control bg-transparent text-white" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control bg-transparent text-white" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Register As</label>
+                            <select name="role" class="form-select bg-transparent text-white">
+                                <option value="user" class="text-dark">User (Viewer/Checker)</option>
+                                <option value="admin" class="text-dark">Admin (Library Manager)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-info w-100 fw-bold">REGISTER</button>
+                    </form>
+                    
+                    <div class="mt-3 text-center small">
+                        <a href="/" class="text-secondary text-decoration-none">Already have an account? Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
