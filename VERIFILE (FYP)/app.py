@@ -137,6 +137,29 @@ def compare_file():
         match = (user_hash == original.hash_value)
         return render_template('dashboard_user.html', match=match, files=FileRecord.query.all(), result_msg="Match!" if match else "Tampered!")
 
+@app.route('/update_file/<int:file_id>', methods=['POST'])
+@login_required
+def update_file(file_id):
+    if current_user.role != 'admin':
+        return "Unauthorized Access", 403
+    
+    file = request.files['file']
+    if file:
+        # 1. Kira hash baru untuk fail yang diupload.pdf]
+        new_hash = calculate_hash(file)
+        
+        # 2. Cari rekod fail dalam database menggunakan ID.pdf]
+        file_to_update = FileRecord.query.get_or_404(file_id)
+        
+        # 3. Update nilai hash dan masa.pdf]
+        file_to_update.hash_value = new_hash
+        file_to_update.upload_time = datetime.now()
+        
+        db.session.commit()
+        flash(f'File {file_to_update.filename} has been updated with new hash!')
+        
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
