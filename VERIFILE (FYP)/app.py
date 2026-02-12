@@ -48,6 +48,19 @@ def calculate_hash(file):
     file.seek(0)
     return sha256.hexdigest()
 
+# --- MODEL DATABASE BARU ---
+class AuditLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(100))
+    action = db.Column(db.String(255))
+    timestamp = db.Column(db.DateTime, default=datetime.now)
+
+# Fungsi helper untuk rakam log secara automatik
+def record_log(action_text):
+    new_log = AuditLog(user_email=current_user.email, action=action_text)
+    db.session.add(new_log)
+    db.session.commit()
+
 # --- ROUTES ---
 
 @app.route('/')
@@ -92,8 +105,11 @@ def register():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
+    if current_user.role != 'admin': return "Access Denied"
     files = FileRecord.query.all()
-    return render_template('dashboard_admin.html', user=current_user, files=files)
+    # Ambil 10 log terakhir untuk dipaparkan
+    logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(10).all() 
+    return render_template('dashboard_admin.html', user=current_user, files=files, logs=logs)
 
 @app.route('/user/dashboard')
 @login_required
@@ -121,6 +137,7 @@ def upload_admin():
             db.session.add(new_file)
         
         db.session.commit()
+        record_log(f"Admin uploaded/updated file: {file.filename}") 
         flash('File Registered/Updated in Library!')
     return redirect(url_for('admin_dashboard'))
 

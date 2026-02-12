@@ -89,4 +89,30 @@
     </tbody>
 </table>
 
+<hr class="mt-5">
+<h5 class="mt-4 text-danger">System Audit Log (Security Tracking)</h5>
+<div class="card shadow-sm p-3 bg-dark text-white">
+    <table class="table table-dark table-sm table-striped small">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User Email</th>
+                <th>Action Performed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ log.user_email }}</td>
+                <td>{{ log.action }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
