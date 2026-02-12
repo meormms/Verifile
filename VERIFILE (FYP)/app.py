@@ -154,28 +154,25 @@ def compare_file():
         match = (user_hash == original.hash_value)
         return render_template('dashboard_user.html', match=match, files=FileRecord.query.all(), result_msg="Match!" if match else "Tampered!")
 
-@app.route('/update_file/<int:file_id>', methods=['POST'])
+import csv
+from flask import Response
+
+@app.route('/export_report')
 @login_required
-def update_file(file_id):
-    if current_user.role != 'admin':
-        return "Unauthorized Access", 403
+def export_report():
+    if current_user.role != 'admin': return "Access Denied"
     
-    file = request.files['file']
-    if file:
-        # 1. Kira hash baru untuk fail yang diupload.pdf]
-        new_hash = calculate_hash(file)
-        
-        # 2. Cari rekod fail dalam database menggunakan ID.pdf]
-        file_to_update = FileRecord.query.get_or_404(file_id)
-        
-        # 3. Update nilai hash dan masa.pdf]
-        file_to_update.hash_value = new_hash
-        file_to_update.upload_time = datetime.now()
-        
-        db.session.commit()
-        flash(f'File {file_to_update.filename} has been updated with new hash!')
-        
-    return redirect(url_for('admin_dashboard'))
+    files = FileRecord.query.all()
+    
+    def generate():
+        data = [['Index', 'Filename', 'Category', 'Hash Value', 'Upload Time']]
+        yield ','.join(data[0]) + '\n'
+        for i, f in enumerate(files, 1):
+            row = [str(i), f.filename, f.category, f.hash_value, str(f.upload_time)]
+            yield ','.join(row) + '\n'
+
+    return Response(generate(), mimetype='text/csv', 
+                    headers={"Content-Disposition": "attachment; filename=verifile_report.csv"})
 
 if __name__ == '__main__':
     with app.app_context():
